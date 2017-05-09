@@ -3,13 +3,9 @@ console.log('Starting application...');
 const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
-
 const notes = require('./notes.js');
-
 const argv = yargs.argv;
 
-
-console.log('***Finished running application!***')
 
 var lolapi = require('lolapi')('RGAPI-c9db71b0-bb76-414b-af32-37030983e82b', 'eune');
  
@@ -27,10 +23,46 @@ lolapi.Summoner.getByName(summonerName, function (error, summoner) {
     }
   } */
   console.log(summoner);
-  var summonerId = summoner[summonerName].id;
-  lolapi.Summoner.getRunes(summonerId, function (error, runes) {
-    if (error) throw error;
-    console.log(runes);
-    // do something with runes
-  })
+
+//   var summonerId = summoner[summonerName].id;
+  
+//   lolapi.Summoner.getRunes(summonerId, function (error, runes) {
+//     if (error) throw error;
+//     console.log(runes);
+//     // do something with runes
+//   })
 });
+
+lolapi.Champion.getAll({ freeToPlay: true }, function (error, champion) {
+  // print free to play champions
+  // console.log(champion.champions);
+
+  var champList = champion.champions;
+  var arr = [];
+
+  champList.forEach(function(element) {
+    arr.push(element.id);
+  }, this);
+
+// print champion ids from our arraylist
+  console.log(arr);
+ 
+// options for the getChampion method
+var options = {
+  dataById: true, 
+  champData: 'altimages'
+};
+
+//TODO make a for-each loop to iterate through arr and pass it to the getChampion
+champId = arr[1];
+
+lolapi.Static.getChampion(champId, options, function (error, champion) {
+  // log the champion data from the passed in Id
+//  if (error) throw error;
+    console.log(champion);
+}); 
+
+});
+
+
+console.log('***Finished running application!***');
