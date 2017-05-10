@@ -50,11 +50,11 @@ lolapi.Champion.getAll({ freeToPlay: true }, function (error, champion) {
 // options for the getChampion method
 var options = {
   dataById: true, 
-  champData: 'altimages'
+  champData: 'image'
 };
 
 //TODO make a for-each loop to iterate through arr and pass it to the getChampion
-champId = arr[1];
+champId = arr[0];
 
 lolapi.Static.getChampion(champId, options, function (error, champion) {
   // log the champion data from the passed in Id

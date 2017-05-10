@@ -12,6 +12,7 @@
   "dependencies": {
     "lodash": "^4.17.2",
     "yargs": "^4.7.1",
-    "lolapi": "^0.3.1"    
+    "lolapi": "^0.3.1",
+    "nodemon": "^1.10.0"    
   }
 }
