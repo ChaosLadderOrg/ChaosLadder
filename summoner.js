@@ -1,8 +1,8 @@
-console.log('Starting summoner.js...');
-
+var region = 'eune';
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
-const lolapi = require('lolapi')(apiKey, 'eune');
+const lolapi = require('lolapi')(apiKey, region);
 
+console.log('Starting summoner.js...');
 
 /*
 Contains summoner information - summoner name, ID, Region, Icon, runes  

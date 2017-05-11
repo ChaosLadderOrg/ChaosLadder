@@ -3,10 +3,12 @@ console.log('Starting application...');
 const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
-const summoner = require('./summoner.js');
 const argv = yargs.argv;
+const summoner = require('./summoner.js');
+var region = 'eune';
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
-const lolapi = require('lolapi')(apiKey, 'eune');
+const lolapi = require('lolapi')(apiKey, region);
+
 
 /*
 TODO Main Functionality as modules:
@@ -48,17 +50,25 @@ console.log(summoner.findSummoner(summonerName));
 // //     // do something with runes
 // //   })
 
-// var options = {
-//   // championIds: 412,
-//   // rankedQueues: ['RANKED_SOLO_5X5'],
-//   beginIndex: 0,
-//   endIndex: 1
-// }; // these options will return 10 ranked 5v5 games containing champion Thresh
-// lolapi.MatchList.getBySummonerId(24670397, options, function (error, matches) {
-//   // got the matches!
-//   if (error) throw error;
+var options = {
+  // championIds: 412,
+  // rankedQueues: ['RANKED_SOLO_5X5'],
+  beginIndex: 0,
+  endIndex: 1
+}; // these options will return 10 ranked 5v5 games containing champion Thresh
+lolapi.MatchList.getBySummonerId(24670397, options, function (error, matches) {
+  // got the matches!
+  if (error) throw error;
 //   console.log(matches);
-// });
+
+    lolapi.Match.get(1669796090, function (callback, match){
+        if (error) throw error;
+        console.log(match);
+        var participantStats = match.participants;
+        console.log(participantStats);
+    });
+
+});
 
 // });
 
