@@ -24,7 +24,7 @@ module.exports.findSummoner = (summonerName) => {
         if(error) {
             throw error;
         } else if (summonerName != null) {
-             var summonerId = summoner[summonerName].id
+            var summonerId = summoner[summonerName].id;
             console.log(summonerId);
 
         var options = {
@@ -38,9 +38,8 @@ module.exports.findSummoner = (summonerName) => {
             // got the matches!
             if (error) throw error;
             console.log(matches);
-            });
+            return summonerId;
+        });
         }
-
     });
-    return 'New note';
 };

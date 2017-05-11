@@ -24,7 +24,9 @@ a)TODO make a for-each loop to iterate through arr and pass it to the getChampio
 */
 
 var summonerName = 'oliwer94';
-console.log(summoner.findSummoner(summonerName));
+// console.log(summoner.findSummoner(summonerName));
+var summonerID = summoner.findSummoner(summonerName);
+console.log(summonerID);
 
 // summoner.findSummoner(summonerName, 'eune')
 
@@ -50,21 +52,42 @@ console.log(summoner.findSummoner(summonerName));
 // //     // do something with runes
 // //   })
 
+
+
+//TODO: take the champion id of the player whose stats we want, locate the corresponding champion id and retrieve stats 
 var options = {
   // championIds: 412,
   // rankedQueues: ['RANKED_SOLO_5X5'],
   beginIndex: 0,
   endIndex: 1
-}; // these options will return 10 ranked 5v5 games containing champion Thresh
-lolapi.MatchList.getBySummonerId(24670397, options, function (error, matches) {
+}; // these options will return 10 ranked 5v5 games containing champion
+lolapi.MatchList.getBySummonerId(summonerID, options, function (error, matches) {
   // got the matches!
   if (error) throw error;
 //   console.log(matches);
+    selectedMatchId = matches[0].matchId;
 
-    lolapi.Match.get(1669796090, function (callback, match){
+    lolapi.Match.get(selectedMatchId, function (callback, match){
         if (error) throw error;
-        console.log(match);
-        var participantStats = match.participants;
+        // console.log(match);
+
+        // returns the list of all 10 participants
+        //TODO: Utilize summoner.js>summonerId, find matching case in playerIdentities
+        var playerIdentities = match.participantIdentities;
+        /* Returns in the following format 
+            { participantId: 9, dSeasonTier: 'DIAMOND',
+            player: ine: [Object],
+            { summonerId: 24670397,
+            summonerName: 'oliwer94',
+            matchHistoryUri: '/v1/stats/player_history/EUN1/29223707',
+            profileIcon: 710 } }
+        */
+        //retreive the first participants stats
+        // var playerId = 9;
+        var participantStats = match.participants[summonerID].stats;
+        
+        // participantStats.championId[18].stats;
+        // console.log(participantStats,null,3);
         console.log(participantStats);
     });
 
