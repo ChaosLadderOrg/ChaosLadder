@@ -4,7 +4,7 @@ const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
 const argv = yargs.argv;
-const summoner = require('./summoner.js');
+const { getSummonerId } = require('./summoner.js');
 var region = 'eune';
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 const lolapi = require('lolapi')(apiKey, region);
@@ -22,13 +22,15 @@ TODO Main Functionality as modules:
 
 a)TODO make a for-each loop to iterate through arr and pass it to the getChampion
 */
+// console.log(summoner.findSummoner(summonerName));
+// var summonerID = summoner.findSummoner(summonerName);
+// console.log(summonerID);
+// var summonerID = 24670397;
 
 var summonerName = 'oliwer94';
-// console.log(summoner.findSummoner(summonerName));
-var summonerID = summoner.findSummoner(summonerName);
-console.log(summonerID);
-
-// summoner.findSummoner(summonerName, 'eune')
+var summonerID = getSummonerId(summonerName, region, (summonerID) => {
+    console.log(summonerID);
+});
 
 // lolapi.Summoner.getByName(summonerName, function (error, summoner) {
 //   if (error) throw error;
@@ -51,48 +53,6 @@ console.log(summonerID);
 // //     console.log(runes);
 // //     // do something with runes
 // //   })
-
-
-
-//TODO: take the champion id of the player whose stats we want, locate the corresponding champion id and retrieve stats 
-var options = {
-  // championIds: 412,
-  // rankedQueues: ['RANKED_SOLO_5X5'],
-  beginIndex: 0,
-  endIndex: 1
-}; // these options will return 10 ranked 5v5 games containing champion
-lolapi.MatchList.getBySummonerId(summonerID, options, function (error, matches) {
-  // got the matches!
-  if (error) throw error;
-//   console.log(matches);
-    selectedMatchId = matches[0].matchId;
-
-    lolapi.Match.get(selectedMatchId, function (callback, match){
-        if (error) throw error;
-        // console.log(match);
-
-        // returns the list of all 10 participants
-        //TODO: Utilize summoner.js>summonerId, find matching case in playerIdentities
-        var playerIdentities = match.participantIdentities;
-        /* Returns in the following format 
-            { participantId: 9, dSeasonTier: 'DIAMOND',
-            player: ine: [Object],
-            { summonerId: 24670397,
-            summonerName: 'oliwer94',
-            matchHistoryUri: '/v1/stats/player_history/EUN1/29223707',
-            profileIcon: 710 } }
-        */
-        //retreive the first participants stats
-        // var playerId = 9;
-        var participantStats = match.participants[summonerID].stats;
-        
-        // participantStats.championId[18].stats;
-        // console.log(participantStats,null,3);
-        console.log(participantStats);
-    });
-
-});
-
 // });
 
 // lolapi.Champion.getAll({ freeToPlay: true }, function (error, champion) {

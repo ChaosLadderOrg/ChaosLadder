@@ -1,7 +1,9 @@
-var region = 'eune';
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
-const lolapi = require('lolapi')(apiKey, region);
+const lolapi = require('lolapi')(apiKey, 'eune');
 
+var summonerId;
+var targetPlayerID;
+var participantStats;
 console.log('Starting summoner.js...');
 
 /*
@@ -14,32 +16,51 @@ if not, reject with error
 
 2.Display summoner icons - maybe
 */
+var getSummonerId = (summonerName, region) => {
 
-module.exports.findSummoner = (summonerName) => {
-
-    console.log('Saying Hello from findSummoner in summoner.js!');
-
+    //finds summonerId based on provided name
     lolapi.Summoner.getByName(summonerName, function (error, summoner) {
-
-        if(error) {
+        if (error) {
             throw error;
         } else if (summonerName != null) {
-            var summonerId = summoner[summonerName].id;
+            summonerId = summoner[summonerName].id;
             console.log(summonerId);
 
-        var options = {
+            var options = {
             // championIds: 412,
             // rankedQueues: ['RANKED_SOLO_5X5'],
-            beginIndex: 0,
-            endIndex: 2
+                beginIndex: 0,
+                endIndex: 2
             };
 
-        lolapi.MatchList.getBySummonerId(summonerId, options, function (error, matches) {
-            // got the matches!
-            if (error) throw error;
-            console.log(matches);
-            return summonerId;
-        });
-        }
+            //returns the specified range of matches based on summonerId
+            lolapi.MatchList.getBySummonerId(summonerId, options, function (error, matches) {
+                if (error) throw error;
+                var selectedMatchId = matches.matches[0].matchId;
+
+                //returns match data based on the selectedMatchId
+                lolapi.Match.get(selectedMatchId, function (callback, match) {
+                    if (error) throw error;
+
+                    var playerIdentities = match.participantIdentities;
+
+                    //iterates over the match participants
+                    playerIdentities.forEach(function (element) {
+                        //searches for a matching summonerId 
+                        if (element.player.summonerId == summonerId) {
+                            targetPlayerID = element.participantId - 1;
+                            console.log(targetPlayerID);
+                            participantStats = match.participants[targetPlayerID].stats;
+                            console.log(participantStats);
+
+                        } else if (error) {
+                            throw error;
+                        }
+                    }, this);
+
+                });
+            });
+        };
     });
 };
+module.exports = { getSummonerId };
