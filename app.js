@@ -1,16 +1,14 @@
-console.log('Starting application...');
-
-const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
 const argv = yargs.argv;
-// const { getSummonerId } = require('./summoner.js');
-const summoner = require('./summoner.js');
-var region = 'eune';
-const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
-const lolapi = require('lolapi')(apiKey, region);
+const { getSummonerId,
+    getSummonerMatches,
+    getTargetMatch,
+    getMatchStats } = require('./summoner.js');
 
-var summonerName = 'oliwer94';
+var region = 'euw';
+var summoner = require('./summoner.js');
+var summonerName = 'hellking007';
 /*
 TODO Main Functionality as modules:
 2.Match list of the first ranked 5 games (solo 5v5) after a certain point.
@@ -23,17 +21,17 @@ TODO Main Functionality as modules:
 
 a)TODO make a for-each loop to iterate through arr and pass it to the getChampion
 */
-
-var summonerStats = summoner.getSummonerId(summonerName, region, (summonerID) => {
+console.log('Starting application...');
+getSummonerId(summonerName, region, (summonerID) => {
     console.log('*******', summonerID);
 
-    var matchList = summoner.getSummonerMatches(summonerID, (matchList) => {
+    getSummonerMatches(summonerID, (matchList) => {
         console.log('*******', matchList);
 
-        var targetMatch = summoner.getTargetMatch(matchList, (targetMatch, matchCall) => {
+        getTargetMatch(matchList, (targetMatch, matchCall) => {
             console.log('*******', targetMatch);
 
-            var playerStats = summoner.getMatchStats(summonerID, targetMatch, matchCall, (playerStats) => {
+            getMatchStats(summonerID, targetMatch, matchCall, (playerStats) => {
                 console.log('*******', playerStats);
             });
 

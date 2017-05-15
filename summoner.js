@@ -1,5 +1,5 @@
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
-const lolapi = require('lolapi')(apiKey, 'eune');
+const lolapi = require('./lolapi/lib/lolapi')(apiKey, 'euw');
 /*
 Contains summoner information - summoner name, ID, Region, Icon, runes  
 
@@ -22,13 +22,14 @@ var getSummonerId = (summonerName, region, callback) => {
     });
 };
 
-
 var getSummonerMatches = (summonerId, callback) => {
     var options = {
         // championIds: 412,
         // rankedQueues: ['RANKED_SOLO_5X5'],
+        // beginTime: 1494540000000,
+        // endTime: 1495144800000,
         beginIndex: 0,
-        endIndex: 2
+        endIndex: 5
     };
     //returns the specified range of matches based on summonerId
     lolapi.MatchList.getBySummonerId(summonerId, options, (error, matches) => {
@@ -38,7 +39,6 @@ var getSummonerMatches = (summonerId, callback) => {
         callback(selectedMatchId);
     });
 };
-
 
 var getTargetMatch = (selectedMatchId, callback) => {
     //returns match data based on the selectedMatchId
@@ -50,7 +50,6 @@ var getTargetMatch = (selectedMatchId, callback) => {
     });
 };
 
-
 var getMatchStats = (summonerId, playerIdentities, match, callback) => {
     //iterates over the match participants
     playerIdentities.forEach(function (element) {
@@ -59,7 +58,6 @@ var getMatchStats = (summonerId, playerIdentities, match, callback) => {
             var targetPlayerID = element.participantId - 1;
             console.log(targetPlayerID);
             var participantStats = match.participants[targetPlayerID].stats;
-            // console.log(participantStats);
 
             var kills = participantStats.kills;
             var deaths = participantStats.deaths;

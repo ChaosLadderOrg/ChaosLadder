@@ -1,0 +1,90 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "lolapi@^0.3.1",
+        "scope": null,
+        "escapedName": "lolapi",
+        "name": "lolapi",
+        "rawSpec": "^0.3.1",
+        "spec": ">=0.3.1 <0.4.0",
+        "type": "range"
+      },
+      "C:\\Users\\Boris\\Documents\\GitHub\\ChaosLadder"
+    ]
+  ],
+  "_from": "lolapi@>=0.3.1 <0.4.0",
+  "_id": "lolapi@0.3.1",
+  "_inCache": true,
+  "_location": "/lolapi",
+  "_nodeVersion": "0.12.7",
+  "_npmUser": {
+    "name": "emmorts",
+    "email": "h.guzas@gmail.com"
+  },
+  "_npmVersion": "2.11.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "lolapi@^0.3.1",
+    "scope": null,
+    "escapedName": "lolapi",
+    "name": "lolapi",
+    "rawSpec": "^0.3.1",
+    "spec": ">=0.3.1 <0.4.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/lolapi/-/lolapi-0.3.1.tgz",
+  "_shasum": "d94ddf41c2f78a7fc2e847278d532b96df47a81d",
+  "_shrinkwrap": null,
+  "_spec": "lolapi@^0.3.1",
+  "_where": "C:\\Users\\Boris\\Documents\\GitHub\\ChaosLadder",
+  "author": {
+    "name": "Tomas Stropus"
+  },
+  "bugs": {
+    "url": "https://github.com/emmorts/lolapi/issues"
+  },
+  "dependencies": {
+    "redis": "^0.12.1"
+  },
+  "description": "Wrapper of the official League of Legends public API",
+  "devDependencies": {
+    "chai": "^1.9.1"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "d94ddf41c2f78a7fc2e847278d532b96df47a81d",
+    "tarball": "https://registry.npmjs.org/lolapi/-/lolapi-0.3.1.tgz"
+  },
+  "gitHead": "50da691053e9c71f11bda5f4a7e75be4fec4aa1a",
+  "homepage": "https://github.com/emmorts/lolapi",
+  "keywords": [
+    "league",
+    "lol",
+    "api",
+    "wrapper"
+  ],
+  "license": "GPL-2.0",
+  "main": "lib/lolapi.js",
+  "maintainers": [
+    {
+      "name": "emmorts",
+      "email": "h.guzas@gmail.com"
+    }
+  ],
+  "name": "lolapi",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emmorts/lolapi.git"
+  },
+  "scripts": {
+    "test": "mocha -t 20000"
+  },
+  "tonicExampleFilename": "./tonicExample.js",
+  "version": "0.3.1"
+}
