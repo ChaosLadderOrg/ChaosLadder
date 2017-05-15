@@ -13,6 +13,8 @@
     "lodash": "^4.17.2",
     "yargs": "^4.7.1",
     "lolapi": "^0.3.1",
-    "nodemon": "^1.10.0"    
+    "nodemon": "^1.10.0",
+    "express": "^4.15.2",
+    "mongoose": "^4.9.9"
   }
 }

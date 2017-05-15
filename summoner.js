@@ -1,11 +1,5 @@
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 const lolapi = require('lolapi')(apiKey, 'eune');
-
-var summonerId;
-var targetPlayerID;
-var participantStats;
-console.log('Starting summoner.js...');
-
 /*
 Contains summoner information - summoner name, ID, Region, Icon, runes  
 
@@ -16,51 +10,71 @@ if not, reject with error
 
 2.Display summoner icons - maybe
 */
-var getSummonerId = (summonerName, region) => {
-
+var getSummonerId = (summonerName, region, callback) => {
     //finds summonerId based on provided name
     lolapi.Summoner.getByName(summonerName, function (error, summoner) {
         if (error) {
             throw error;
         } else if (summonerName != null) {
-            summonerId = summoner[summonerName].id;
-            console.log(summonerId);
-
-            var options = {
-            // championIds: 412,
-            // rankedQueues: ['RANKED_SOLO_5X5'],
-                beginIndex: 0,
-                endIndex: 2
-            };
-
-            //returns the specified range of matches based on summonerId
-            lolapi.MatchList.getBySummonerId(summonerId, options, function (error, matches) {
-                if (error) throw error;
-                var selectedMatchId = matches.matches[0].matchId;
-
-                //returns match data based on the selectedMatchId
-                lolapi.Match.get(selectedMatchId, function (callback, match) {
-                    if (error) throw error;
-
-                    var playerIdentities = match.participantIdentities;
-
-                    //iterates over the match participants
-                    playerIdentities.forEach(function (element) {
-                        //searches for a matching summonerId 
-                        if (element.player.summonerId == summonerId) {
-                            targetPlayerID = element.participantId - 1;
-                            console.log(targetPlayerID);
-                            participantStats = match.participants[targetPlayerID].stats;
-                            console.log(participantStats);
-
-                        } else if (error) {
-                            throw error;
-                        }
-                    }, this);
-
-                });
-            });
+            var summonerId = summoner[summonerName].id;
+            callback(summonerId);
         };
     });
 };
-module.exports = { getSummonerId };
+
+
+var getSummonerMatches = (summonerId, callback) => {
+    var options = {
+        // championIds: 412,
+        // rankedQueues: ['RANKED_SOLO_5X5'],
+        beginIndex: 0,
+        endIndex: 2
+    };
+    //returns the specified range of matches based on summonerId
+    lolapi.MatchList.getBySummonerId(summonerId, options, (error, matches) => {
+        if (error) throw error;
+        var selectedMatchId = matches.matches[0].matchId;
+        console.log(selectedMatchId);
+        callback(selectedMatchId);
+    });
+};
+
+
+var getTargetMatch = (selectedMatchId, callback) => {
+    //returns match data based on the selectedMatchId
+    lolapi.Match.get(selectedMatchId, function (error, match) {
+        if (error) throw error;
+        var playerIdentities = match.participantIdentities;
+        // console.log(playerIdentities);
+        callback(playerIdentities, match);
+    });
+};
+
+
+var getMatchStats = (summonerId, playerIdentities, match, callback) => {
+    //iterates over the match participants
+    playerIdentities.forEach(function (element) {
+        //searches for a matching summonerId 
+        if (element.player.summonerId == summonerId) {
+            var targetPlayerID = element.participantId - 1;
+            console.log(targetPlayerID);
+            var participantStats = match.participants[targetPlayerID].stats;
+            // console.log(participantStats);
+
+            var kills = participantStats.kills;
+            var deaths = participantStats.deaths;
+            var assists = participantStats.assists;
+            var playerCs = participantStats.minionsKilled;
+            var playerKDA = 'Kills: ' + kills + ', Deaths: ' + deaths + ', Assists: ' + assists + ' , Creep Score: ' + playerCs;
+            callback(playerKDA);
+        }
+    }, this);
+};
+
+//export the functions
+module.exports = {
+    getSummonerId,
+    getSummonerMatches,
+    getTargetMatch,
+    getMatchStats
+};

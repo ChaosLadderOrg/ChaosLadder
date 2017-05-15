@@ -4,12 +4,13 @@ const fs = require('fs');
 const _ = require('lodash');
 const yargs = require('yargs');
 const argv = yargs.argv;
-const { getSummonerId } = require('./summoner.js');
+// const { getSummonerId } = require('./summoner.js');
+const summoner = require('./summoner.js');
 var region = 'eune';
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 const lolapi = require('lolapi')(apiKey, region);
 
-
+var summonerName = 'oliwer94';
 /*
 TODO Main Functionality as modules:
 2.Match list of the first ranked 5 games (solo 5v5) after a certain point.
@@ -22,29 +23,24 @@ TODO Main Functionality as modules:
 
 a)TODO make a for-each loop to iterate through arr and pass it to the getChampion
 */
-// console.log(summoner.findSummoner(summonerName));
-// var summonerID = summoner.findSummoner(summonerName);
-// console.log(summonerID);
-// var summonerID = 24670397;
 
-var summonerName = 'oliwer94';
-var summonerID = getSummonerId(summonerName, region, (summonerID) => {
-    console.log(summonerID);
+var summonerStats = summoner.getSummonerId(summonerName, region, (summonerID) => {
+    console.log('*******', summonerID);
+
+    var matchList = summoner.getSummonerMatches(summonerID, (matchList) => {
+        console.log('*******', matchList);
+
+        var targetMatch = summoner.getTargetMatch(matchList, (targetMatch, matchCall) => {
+            console.log('*******', targetMatch);
+
+            var playerStats = summoner.getMatchStats(summonerID, targetMatch, matchCall, (playerStats) => {
+                console.log('*******', playerStats);
+            });
+
+        });
+    });
+
 });
-
-// lolapi.Summoner.getByName(summonerName, function (error, summoner) {
-//   if (error) throw error;
-//   /* summoner object
-//   { wickd:
-//     {
-//       id: 71500,
-//       name: 'Wickd',
-//       profileIconId: 613,
-//       summonerLevel: 30,
-//       revisionDate: 1408199475000
-//     }
-//   } */
-//   console.log(summoner);
 
 // //   var summonerId = summoner[summonerName].id;
 
@@ -84,5 +80,10 @@ var summonerID = getSummonerId(summonerName, region, (summonerID) => {
 //   });
 
 // });
+
+// lolapi.Stats.getSummary(summonerId, function (error, summary) {
+//                     if (error) throw error;
+//                     console.log(summary);
+//                 });
 
 console.log('***Finished running application!***');
