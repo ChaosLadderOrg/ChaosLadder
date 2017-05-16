@@ -20,10 +20,6 @@ var createMatchList = (callback) => {
         }, this);
         console.log(playerList);
 
-        // var playerList1 = playerList.sort(function () { return 0.5 - Math.random(); });
-        // playerList2 = playerList.sort(function () { return 0.5 - Math.random(); });
-
-
         // var weeklyMatches = [{ type: "Volvo", year: 2016 },
         // { type: "Saab", year: 2001 },
         // { type: "BMW", year: 2010 }];
@@ -36,10 +32,17 @@ var createMatchList = (callback) => {
         playerList2.sort(function () { return 0.5 - Math.random(); });
 
         while (playerList1.length) {
-            var name1 = playerList1.pop(),
-                name2 = playerList2[0] == name1 ? playerList2.pop() : playerList2.shift();
-
+           var name1 = playerList1.pop();
+            var name2 = playerList2[0];
+            if (name2 == name1){
+                name2 = playerList2.pop();
+            }
+            playerList2.shift();
             console.log(name1 + ' gets ' + name2);
+            var index2 = playerList2.indexOf(name1);
+            var index1 = playerList1.indexOf(name2);
+            if (playerList2.indexOf(name1) >= 0) playerList2.splice(index2, 1);
+            if (playerList1.indexOf(name2) >= 0) playerList1.splice(index1, 1);
         }
 
     });
