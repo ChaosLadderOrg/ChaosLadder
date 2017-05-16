@@ -1,12 +1,58 @@
 const { getAllUsers, getSummonerId } = require('./mongoose.js');
+var playerList = [];
 
 getAllUsers((usersList) => {
     // console.log(usersList);
 });
 
 getSummonerId((summonerIdList) => {
-    console.log(summonerIdList);
+    // console.log(summonerIdList[0].summonerID);
+
 });
+
+var createMatchList = (callback) => {
+
+    getSummonerId((summonerIdList) => {
+        // console.log(summonerIdList);
+
+        summonerIdList.forEach(function (element) {
+            playerList.push(element.summonerID);
+        }, this);
+        console.log(playerList);
+
+        // var playerList1 = playerList.sort(function () { return 0.5 - Math.random(); });
+        // playerList2 = playerList.sort(function () { return 0.5 - Math.random(); });
+
+
+        // var weeklyMatches = [{ type: "Volvo", year: 2016 },
+        // { type: "Saab", year: 2001 },
+        // { type: "BMW", year: 2010 }];
+
+
+        var playerList1 = playerList.slice(),
+            playerList2 = playerList.slice();
+
+        playerList1.sort(function () { return 0.5 - Math.random(); });
+        playerList2.sort(function () { return 0.5 - Math.random(); });
+
+        while (playerList1.length) {
+            var name1 = playerList1.pop(),
+                name2 = playerList2[0] == name1 ? playerList2.pop() : playerList2.shift();
+
+            console.log(name1 + ' gets ' + name2);
+        }
+
+    });
+};
+
+createMatchList((weeklyList) => {
+    console.log(weeklyList);
+});
+
+module.exports = {
+    createMatchList
+};
+
 /* TODO:
 1.Create a matchmaing system based on the users in the tournament ladder 
 (if not enough users for pairs, just give a random user a free win or a break this week)
