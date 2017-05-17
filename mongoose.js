@@ -27,17 +27,34 @@ const matchmakingModel = mongoose.model('matchmaking', matchmaking);
 mongoose.connect(uri);
 mongoose.Promise = global.Promise;
 
+var createUser = (userEmail, userPassword, userSummonerName, userRegion, callback) => {
+    db.on('error', console.error.bind(console, 'connection error:'));
+  
+    var userInsert = new userModel({
+        email: userEmail,
+        password: userPassword,
+        summonerID: getSummonerId(userSummonerName),
+        summonerName: userSummonerName,
+        region: userRegion
+    });
+    console.log(userInsert);
+    userInsert.save(function (error) {
+        if (error) throw error;
+        console.log('testing user insert');
+    });
+};
+
 var getAllUsers = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
-    userModel.find().exec(function (error, data) {
-        callback(data);
+    userModel.find().exec(function (error, userList) {
+        callback(userList);
     });
 };
 
 var getSummonerId = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
-    userModel.find({}, 'summonerID').exec(function (error, data) {
-        callback(data);
+    userModel.find({}, 'summonerID').exec(function (error, summonerId) {
+        callback(summonerId);
     });
 };
 
@@ -57,7 +74,7 @@ var createMatches = (matchedPairs, callback) => {
         console.log(matchInsert);
         matchInsert.save(function (error) {
             if (error) throw error;
-            console.log('test');
+            console.log('test match insert');
         });
     }, this);
 };
@@ -65,5 +82,6 @@ var createMatches = (matchedPairs, callback) => {
 module.exports = {
     getAllUsers,
     getSummonerId,
+    createUser,
     createMatches
 };
