@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 const uri = 'mongodb://ladder:password@ds133981.mlab.com:33981/chaosladder';
-mongoose.connect(uri);
-mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 const user = mongoose.Schema({
     email: String,
@@ -10,7 +8,6 @@ const user = mongoose.Schema({
     summonerName: String,
     region: String
 });
-
 const matchmaking = mongoose.Schema({
     weekNumber: Number,
     players: [{
@@ -23,38 +20,32 @@ const matchmaking = mongoose.Schema({
         winner: Boolean
     }]
 });
+const db = mongoose.connection;
+const userModel = mongoose.model('users', user);
+const matchmakingModel = mongoose.model('matchmaking', matchmaking);
+
+mongoose.connect(uri);
+mongoose.Promise = global.Promise;
 
 var getAllUsers = (callback) => {
-    var db = mongoose.connection;
-    var User = mongoose.model('users', user);
     db.on('error', console.error.bind(console, 'connection error:'));
-    // console.log("connected to " + uri);
-
-    User.find().exec(function (error, data) {
-        // console.log(data);
+    userModel.find().exec(function (error, data) {
         callback(data);
     });
-    db.close();
 };
 
 var getSummonerId = (callback) => {
-    var db = mongoose.connection;
-    var User = mongoose.model('users', user);
     db.on('error', console.error.bind(console, 'connection error:'));
-    User.find({}, 'summonerID').exec(function (error, data) {
+    userModel.find({}, 'summonerID').exec(function (error, data) {
         callback(data);
     });
-    db.close();
 };
 
-var createMatches = (matchPairs, callback) => {
-    var db = mongoose.connection;
-    var match = mongoose.model('matchmaking', matchmaking);
+var createMatches = (matchedPairs, callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
-    
-    matchPairs.forEach(function (element) {
-        console.log(element);
-        var matchInsert = new match({
+    matchedPairs.forEach(function (element) {
+        // console.log(element);
+        var matchInsert = new matchmakingModel({
             weekNumber: 1,
             players: [{
                 summonerID: element.player1
@@ -68,13 +59,7 @@ var createMatches = (matchPairs, callback) => {
             if (error) throw error;
             console.log('test');
         });
-
     }, this);
-
-    // User.find({}, 'summonerID').exec(function (error, data) {
-    //     callback(data);
-    // });
-    db.close();
 };
 
 module.exports = {

@@ -1,6 +1,6 @@
 const { getAllUsers, getSummonerId, createMatches} = require('./mongoose.js');
 var playerList = [];
-var weeklyMatches = [];
+var matchedPairs = [];
 var name1;
 var name2;
 
@@ -9,6 +9,7 @@ var name2;
 // });
 
 var createMatchList = (callback) => {
+
     getSummonerId((summonerIdList) => {
         summonerIdList.forEach(function (element) {
             playerList.push(element.summonerID);
@@ -29,14 +30,14 @@ var createMatchList = (callback) => {
             }
             playerList2.shift();
             // console.log(name1 + ' gets ' + name2);
-            weeklyMatches.push({ player1: name1, player2: name2 });
+            matchedPairs.push({ player1: name1, player2: name2 });
             var index2 = playerList2.indexOf(name1);
             var index1 = playerList1.indexOf(name2);
             if (playerList2.indexOf(name1) >= 0) playerList2.splice(index2, 1);
             if (playerList1.indexOf(name2) >= 0) playerList1.splice(index1, 1);
         }
-        createMatches(weeklyMatches);
-        callback(weeklyMatches);
+        createMatches(matchedPairs);
+        callback(matchedPairs);
     });
 };
 
