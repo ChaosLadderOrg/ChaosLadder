@@ -51,7 +51,7 @@ var createMatches = (matchPairs, callback) => {
     var db = mongoose.connection;
     var match = mongoose.model('matchmaking', matchmaking);
     db.on('error', console.error.bind(console, 'connection error:'));
-    var saves = [];
+    
     matchPairs.forEach(function (element) {
         console.log(element);
         var matchInsert = new match({
@@ -62,36 +62,13 @@ var createMatches = (matchPairs, callback) => {
             {
                 summonerID: element.player2
             }]
-        }).save()
-            .then((err) => {
-                console.log(err.message);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-
+        });
         console.log(matchInsert);
-        //   for (var matchup in matchInsert) {
-        //         new match({
-        //             weekNumber: 1,
-        //             players: [{
-        //                 summonerID: element.player1
-        //             },
-        //             {
-        //                 summonerID: element.player2
-        //             }]
-        //         }).save()
-        //             .catch((err) => {
-        //                 console.log(err.message);
-        //             });
-        //     }
+        matchInsert.save(function (error) {
+            if (error) throw error;
+            console.log('test');
+        });
 
-
-
-        // matchInsert.save(function (error) {
-        //     if (error) throw error;
-        //     console.log('test');
-        // });
     }, this);
 
     // User.find({}, 'summonerID').exec(function (error, data) {
