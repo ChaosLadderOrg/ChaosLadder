@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const uri = 'mongodb://ladder:password@ds133981.mlab.com:33981/chaosladder';
 mongoose.connect(uri);
 mongoose.Promise = global.Promise;
-const { createMatchList } = require('./matchmaking.js');
 const Schema = mongoose.Schema;
 const user = mongoose.Schema({
     email: String,
@@ -48,33 +47,38 @@ var getSummonerId = (callback) => {
     db.close();
 };
 
-var createMatches = (createMatchList, (callback) => {
+var createMatches = (matchPairs, callback) => {
     var db = mongoose.connection;
     var match = mongoose.model('matchmaking', matchmaking);
     db.on('error', console.error.bind(console, 'connection error:'));
-    // console.log("connected to " + uri);
+    
+    matchPairs.forEach(function (element) {
+        console.log(element);
+        var matchInsert = new match({
+            weekNumber: 1,
+            players: [{
+                summonerID: element.player1
+            },
+            {
+                summonerID: element.player2
+            }]
+        });
+        console.log(matchInsert);
+        matchInsert.save(function (error) {
+            if (error) throw error;
+            console.log('test');
+        });
 
-    var match = new matchmaking({
-        weekNumber: 1,
-        players: [{
-            summonerID: player1
-        },
-        {
-            summonerID: player2
-        }]
-    });
+    }, this);
 
-    match.save(function (error) {
-        if (error) throw error;
-    });
-
-    User.find({}, 'summonerID').exec(function (error, data) {
-        callback(data);
-    });
+    // User.find({}, 'summonerID').exec(function (error, data) {
+    //     callback(data);
+    // });
     db.close();
-});
+};
 
 module.exports = {
     getAllUsers,
-    getSummonerId
+    getSummonerId,
+    createMatches
 };
