@@ -10,6 +10,7 @@ if not, reject with error
 
 2.Display summoner icons - maybe
 */
+
 var getSummonerId = (summonerName, region, callback) => {
     //finds summonerId based on provided name
     lolapi.Summoner.getByName(summonerName, function (error, summoner) {

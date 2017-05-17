@@ -1,13 +1,13 @@
 const _ = require('lodash');
 const yargs = require('yargs');
 const argv = yargs.argv;
-const { getSummonerId, getSummonerMatches, getTargetMatch, getMatchStats } = require('./summoner.js');
+const { getAllIds, getSummonerMatches, getTargetMatch, getMatchStats } = require('./summoner.js');
 var region = 'euw';
 var summoner = require('./summoner.js');
 var summonerName = 'hellking007';
 
 console.log('Starting application...');
-getSummonerId(summonerName, region, (summonerID) => {
+getAllIds(summonerName, region, (summonerID) => {
     console.log('*******', summonerID);
 
     getSummonerMatches(summonerID, (matchList) => {
