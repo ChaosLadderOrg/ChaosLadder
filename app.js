@@ -1,30 +1,33 @@
 const _ = require('lodash');
 const yargs = require('yargs');
 const argv = yargs.argv;
-const { getAllIds, getSummonerMatches, getTargetMatch, getMatchStats } = require('./summoner.js');
+const { getIdBySummoner, getMatchesBySummonerId, getMatchData, getStatsById } = require('./summoner.js');
 var region = 'euw';
 var summoner = require('./summoner.js');
 var summonerName = 'hellking007';
 
 console.log('Starting application...');
-getAllIds(summonerName, region, (summonerID) => {
-    console.log('*******', summonerID);
 
-    getSummonerMatches(summonerID, (matchList) => {
-        console.log('*******', matchList);
+// getSummonerStats(summonerName, region, (playerStats) => {
 
-        getTargetMatch(matchList, (targetMatch, matchCall) => {
-            console.log('*******', targetMatch);
+    getIdBySummoner(summonerName, region, (summonerID) => {
+        console.log('*******', summonerID);
 
-            getMatchStats(summonerID, targetMatch, matchCall, (playerStats) => {
-                console.log('*******', playerStats);
+        getMatchesBySummonerId(summonerID, (matchList) => {
+            console.log('*******', matchList);
+
+            getMatchData(matchList, (matchId, matchCall) => {
+                console.log('*******', matchId);
+
+                getStatsById(summonerID, matchId, matchCall, (playerStats) => {
+                    console.log('*******', playerStats);
+                });
+
             });
-
         });
+
     });
-
-});
-
+// });
 /*
 TODO Main Functionality as modules:
 2.Match list of the first ranked 5 games (solo 5v5) after a certain point.

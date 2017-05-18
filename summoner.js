@@ -1,17 +1,7 @@
 const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 const lolapi = require('./lolapi/lib/lolapi')(apiKey, 'euw');
-/*
-Contains summoner information - summoner name, ID, Region, Icon, runes  
 
-TODO Main Functionality as modules:
-1.Summoner profile - summoner name and region - user must enter their summoner name and region.
-accept user input - summoner name = string, region select from dropdown, check if user exists, if yes confirm and proceed, 
-if not, reject with error
-
-2.Display summoner icons - maybe
-*/
-
-var getSummonerId = (summonerName, region, callback) => {
+var getIdBySummoner = (summonerName, region, callback) => {
     //finds summonerId based on provided name
     lolapi.Summoner.getByName(summonerName, function (error, summoner) {
         if (error) {
@@ -23,7 +13,7 @@ var getSummonerId = (summonerName, region, callback) => {
     });
 };
 
-var getSummonerMatches = (summonerId, callback) => {
+var getMatchesBySummonerId = (summonerId, callback) => {
     var options = {
         // championIds: 412,
         // rankedQueues: ['RANKED_SOLO_5X5'],
@@ -35,23 +25,21 @@ var getSummonerMatches = (summonerId, callback) => {
     //returns the specified range of matches based on summonerId
     lolapi.MatchList.getBySummonerId(summonerId, options, (error, matches) => {
         if (error) throw error;
-        var selectedMatchId = matches.matches[0].matchId;
-        console.log(selectedMatchId);
-        callback(selectedMatchId);
+        var matchId = matches.matches[0].matchId;
+        callback(matchId);
     });
 };
 
-var getTargetMatch = (selectedMatchId, callback) => {
+var getMatchData = (matchId, callback) => {
     //returns match data based on the selectedMatchId
-    lolapi.Match.get(selectedMatchId, function (error, match) {
+    lolapi.Match.get(matchId, function (error, match) {
         if (error) throw error;
         var playerIdentities = match.participantIdentities;
-        // console.log(playerIdentities);
         callback(playerIdentities, match);
     });
 };
 
-var getMatchStats = (summonerId, playerIdentities, match, callback) => {
+var getStatsById = (summonerId, playerIdentities, match, callback) => {
     //iterates over the match participants
     playerIdentities.forEach(function (element) {
         //searches for a matching summonerId 
@@ -72,8 +60,8 @@ var getMatchStats = (summonerId, playerIdentities, match, callback) => {
 
 //export the functions
 module.exports = {
-    getSummonerId,
-    getSummonerMatches,
-    getTargetMatch,
-    getMatchStats
+    getIdBySummoner,
+    getMatchesBySummonerId,
+    getMatchData,
+    getStatsById
 };

@@ -1,5 +1,5 @@
 const { Schema, db, userModel } = require('./mongoose.js');
-const { getSummonerMatches, getTargetMatch, getMatchStats } = require('./summoner.js');
+const { getSummonerMatches, getMatchData, getMatchStats } = require('./summoner.js');
 var playerList = [];
 var matchedPairs = [];
 var name1;
@@ -25,13 +25,13 @@ const matchmaking = Schema({
 
 var getAllIds = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
-    userModel.find({}, 'summonerID').exec(function (error, summonerId) {
-        callback(summonerId);
+    userModel.find({}, 'summonerID').exec(function (error, summonerIdList) {
+        console.log('SUMMONER ID LIST', summonerIdList);
+        callback(summonerIdList);
     });
 };
 
 var createMatchList = (callback) => {
-
     getAllIds((summonerIdList) => {
         summonerIdList.forEach(function (element) {
             playerList.push(element.summonerID);
@@ -58,6 +58,7 @@ var createMatchList = (callback) => {
             if (playerList1.indexOf(name2) >= 0) playerList1.splice(index1, 1);
         }
         createMatches(matchedPairs);
+        console.log('MATCHED PAIRS', matchedPairs);
         callback(matchedPairs);
     });
 };
@@ -82,7 +83,7 @@ var createMatches = (matchedPairs, callback) => {
         console.log(matchInsert);
         matchInsert.save(function (error) {
             if (error) throw error;
-            console.log('test match insert');
+            console.log('MATCH INSERT');
         });
     }, this);
 };

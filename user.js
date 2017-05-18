@@ -7,22 +7,22 @@ const user = Schema({
     region: String
 });
 
-var createUser = (userEmail, userPassword, userSummonerName, userRegion, callback) => {
-    db.on('error', console.error.bind(console, 'connection error:'));
+// var createUser = (userEmail, userPassword, userSummonerName, userRegion, callback) => {
+//     db.on('error', console.error.bind(console, 'connection error:'));
 
-    var userInsert = new userModel({
-        email: userEmail,
-        password: userPassword,
-        summonerID: getSummonerId(userSummonerName),
-        summonerName: userSummonerName,
-        region: userRegion
-    });
-    console.log(userInsert);
-    userInsert.save(function (error) {
-        if (error) throw error;
-        console.log('testing user insert');
-    });
-};
+//     var userInsert = new userModel({
+//         email: userEmail,
+//         password: userPassword,
+//         summonerID: getSummonerId(userSummonerName),
+//         summonerName: userSummonerName,
+//         region: userRegion
+//     });
+//     console.log(userInsert);
+//     userInsert.save(function (error) {
+//         if (error) throw error;
+//         console.log('testing user insert');
+//     });
+// };
 
 var getAllUsers = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
