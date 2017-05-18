@@ -1,10 +1,6 @@
-const { Schema, db, userModel } = require('./mongoose.js');
-const { getSummonerMatches, getMatchData, getMatchStats } = require('./summoner.js');
-var playerList = [];
-var matchedPairs = [];
-var name1;
-var name2;
-
+const { mongoose, Schema, db } = require('./mongoose.js');
+const { getMatchesBySummonerId, getMatchData, getStatsById} = require('./summoner.js');
+const { user, userModel } = require('./user.js');
 const matchmaking = Schema({
     weekNumber: Number,
     players: [{
@@ -17,7 +13,12 @@ const matchmaking = Schema({
         winner: Boolean
     }]
 });
+const matchmakingModel = mongoose.model('matchmaking', matchmaking);
 
+var playerList = [];
+var matchedPairs = [];
+var name1;
+var name2;
 
 // getAllUsers((usersList) => {
 //     console.log(usersList);
@@ -89,6 +90,8 @@ var createMatches = (matchedPairs, callback) => {
 };
 
 module.exports = {
+    matchmaking,
+    matchmakingModel,
     createMatchList
 };
 

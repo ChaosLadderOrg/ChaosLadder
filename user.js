@@ -1,4 +1,4 @@
-const { Schema, db, userModel } = require('./mongoose.js');
+const { mongoose, Schema, db } = require('./mongoose.js');
 const user = Schema({
     email: String,
     password: String,
@@ -6,6 +6,7 @@ const user = Schema({
     summonerName: String,
     region: String
 });
+const userModel = mongoose.model('users', user);
 
 // var createUser = (userEmail, userPassword, userSummonerName, userRegion, callback) => {
 //     db.on('error', console.error.bind(console, 'connection error:'));
@@ -27,6 +28,16 @@ const user = Schema({
 var getAllUsers = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     userModel.find().exec(function (error, userList) {
+        console.log('GET ALL USERS', userList);
         callback(userList);
     });
+};
+
+getAllUsers((userList) => {
+    console.log(userList);
+});
+
+module.exports = {
+    user,
+    userModel
 };

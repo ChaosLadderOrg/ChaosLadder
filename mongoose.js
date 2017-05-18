@@ -5,13 +5,8 @@ const db = mongoose.connection;
 mongoose.connect(uri);
 mongoose.Promise = global.Promise;
 
-const userModel = mongoose.model('users', user);
-const matchmakingModel = mongoose.model('matchmaking', matchmaking);
-
-
 module.exports = {
+    mongoose,
     Schema,
-    db,
-    userModel,
-    matchmakingModel
+    db
 };
