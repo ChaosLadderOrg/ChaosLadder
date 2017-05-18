@@ -1,5 +1,5 @@
 const { mongoose, Schema, db } = require('./mongoose.js');
-const { getMatchesBySummonerId, getMatchData, getStatsById} = require('./summoner.js');
+const { getMatchesBySummonerId, getMatchData, getStatsById } = require('./summoner.js');
 const { user, userModel } = require('./user.js');
 const matchmaking = Schema({
     weekNumber: Number,
@@ -68,7 +68,7 @@ createMatchList((weeklyList) => {
     // console.log(weeklyList);
 });
 
-var createMatches = (matchedPairs, callback) => {
+var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchedPairs.forEach(function (element) {
         // console.log(element);
@@ -87,7 +87,7 @@ var createMatches = (matchedPairs, callback) => {
             console.log('MATCH INSERT');
         });
     }, this);
-};
+});
 
 module.exports = {
     matchmaking,

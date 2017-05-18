@@ -1,33 +1,23 @@
-const _ = require('lodash');
-const yargs = require('yargs');
-const argv = yargs.argv;
-const { getIdBySummoner, getMatchesBySummonerId, getMatchData, getStatsById } = require('./summoner.js');
-var region = 'euw';
-var summoner = require('./summoner.js');
-var summonerName = 'hellking007';
+// const _ = require('lodash');
+// const yargs = require('yargs');
+// const argv = yargs.argv;
+const { getSummonerStats } = require('./summoner.js');
+const { createUser } = require('./user.js');
 
-console.log('Starting application...');
+var email = 'liko@liko.com';
+var password = '123eerr11';
+var sumName = 'hellking007';
+var accountRegion = 'euw';
 
-// getSummonerStats(summonerName, region, (playerStats) => {
 
-    getIdBySummoner(summonerName, region, (summonerID) => {
-        console.log('*******', summonerID);
+getSummonerStats(sumName, (callback) => {
+    console.log('getSummonerStats RETURN:', callback);
+});
 
-        getMatchesBySummonerId(summonerID, (matchList) => {
-            console.log('*******', matchList);
-
-            getMatchData(matchList, (matchId, matchCall) => {
-                console.log('*******', matchId);
-
-                getStatsById(summonerID, matchId, matchCall, (playerStats) => {
-                    console.log('*******', playerStats);
-                });
-
-            });
-        });
-
-    });
+// createUser(email, password, sumName, accountRegion, (callback) => { //STOPS 
+//     console.log('CREATE USER CALLBACK', callback);
 // });
+
 /*
 TODO Main Functionality as modules:
 2.Match list of the first ranked 5 games (solo 5v5) after a certain point.
@@ -84,5 +74,3 @@ a)TODO make a for-each loop to iterate through arr and pass it to the getChampio
 //                     if (error) throw error;
 //                     console.log(summary);
 //                 });
-
-console.log('***Finished running application!***');
