@@ -65,20 +65,20 @@ var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
 var getSummonerStats = (summonerName, callback) => {
     var stats;
     getIdBySummoner(summonerName, (summonerId) => {
-        console.log('SUMMONER ID:', summonerId);
+        // console.log('SUMMONER ID:', summonerId);
         getMatchesBySummonerId(summonerId, (matchList) => {
-            console.log('MATCH LIST IDS:', matchList);
+            // console.log('MATCH LIST IDS:', matchList);
             getMatchData(matchList, (matchId, targetMatch) => {
-                console.log('GET MATCH DATA:', matchId);
+                // console.log('GET MATCH DATA:', matchId);
                 getStatsById(summonerId, matchId, targetMatch, (playerStats) => {
                     console.log('PLAYER STATS BY ID:', playerStats);
                     stats = playerStats;
+                    callback(stats);
                 });
             });
         });
     });
-    console.log('RETURN CALL OF STATS:', stats);
-    callback(stats);
+    // console.log('RETURN CALL OF STATS:', stats);
 };
 
 

@@ -1,6 +1,10 @@
 // const _ = require('lodash');
 // const yargs = require('yargs');
 // const argv = yargs.argv;
+
+const express = require('express');
+var app = express();
+
 const { getSummonerStats } = require('./summoner.js');
 const { createUser } = require('./user.js');
 
@@ -9,13 +13,28 @@ var password = '123eerr11';
 var sumName = 'hellking007';
 var accountRegion = 'euw';
 
+// createUser(email, password, sumName, accountRegion, (confirmation) => {
+//         console.log(confirmation);
+//          });
 
-getSummonerStats(sumName, (callback) => {
-    console.log('getSummonerStats RETURN:', callback);
+// app.get('/createuser', (req, res) => {
+//     createUser(email, password, sumName, accountRegion, (confirmation) => {
+//         console.log(confirmation);
+//         res.status(200).send('CREATE USER CALLBACK', confirmation);
+        
+//     });
+// });
+
+app.get('/getstats', (req, res) => {
+    getSummonerStats(sumName, (stats) => {
+        console.log(stats);
+        res.status(200).send(stats);
+    });
 });
 
-createUser(email, password, sumName, accountRegion, (callback) => { //STOPS 
-    console.log('CREATE USER CALLBACK', callback);
+
+app.listen(3000, () => {
+    console.log('Server is up on port 3000!');
 });
 
 /*
