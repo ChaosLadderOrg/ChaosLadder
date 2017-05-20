@@ -14,9 +14,9 @@ getSummonerStats(sumName, (callback) => {
     console.log('getSummonerStats RETURN:', callback);
 });
 
-// createUser(email, password, sumName, accountRegion, (callback) => { //STOPS 
-//     console.log('CREATE USER CALLBACK', callback);
-// });
+createUser(email, password, sumName, accountRegion, (callback) => { //STOPS 
+    console.log('CREATE USER CALLBACK', callback);
+});
 
 /*
 TODO Main Functionality as modules:

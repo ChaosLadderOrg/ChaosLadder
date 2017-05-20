@@ -11,20 +11,21 @@ const userModel = mongoose.model('users', user);
 
 var createUser = (userEmail, userPassword, userSummonerName, userRegion, callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
-
-    var userInsert = new userModel({
-        email: userEmail,
-        password: userPassword,
-        summonerID: getIdBySummoner(userSummonerName),
-        summonerName: userSummonerName,
-        region: userRegion
+    getIdBySummoner(userSummonerName, (summonerId) => {
+        var userInsert = new userModel({
+            email: userEmail,
+            password: userPassword,
+            summonerID: summonerId,
+            summonerName: userSummonerName,
+            region: userRegion
+        });
+        console.log(userInsert);
+        userInsert.save(function (error) {
+            if (error) throw error;
+            console.log('testing user insert');
+        });
+        callback(userInsert);
     });
-    console.log(userInsert);
-    userInsert.save(function (error) {
-        if (error) throw error;
-        console.log('testing user insert');
-    });
-    callback(userInsert);
 };
 
 var getAllUsers = (callback) => {
