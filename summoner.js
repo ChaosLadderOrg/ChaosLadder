@@ -16,6 +16,21 @@ var getIdBySummoner = (summonerName, data) => {
     });
 };
 
+//Get a specific match's data
+var getMatchBySummonerId = (summonerId, callback) => {
+    var options = {
+        beginIndex: 0,
+        endIndex: 5
+    };
+    //returns the specified range of matches based on summonerId
+    lolapi.MatchList.getBySummonerId(summonerId, options, (error, matchList) => {
+        if (error) throw error;
+        var matchId = matchList.matches[0].matchId;
+        callback(matchId);
+    });
+};
+
+//Get a range of matches and their data
 var getMatchesBySummonerId = (summonerId, callback) => {
     var options = {
         // championIds: 412,
@@ -26,10 +41,16 @@ var getMatchesBySummonerId = (summonerId, callback) => {
         endIndex: 5
     };
     //returns the specified range of matches based on summonerId
-    lolapi.MatchList.getBySummonerId(summonerId, options, (error, matches) => {
+    lolapi.MatchList.getBySummonerId(summonerId, options, (error, matchList) => {
         if (error) throw error;
-        var matchId = matches.matches[0].matchId;
-        callback(matchId);
+        var matches = matchList.matches;
+        var matchIds = [];
+        matches.forEach(function (element) {
+            matchIds.push(element.matchId);
+            // matchIds[element].push(matches.matchId);
+        }, this);
+        console.log(matchIds);
+        callback(matchIds);
     });
 };
 
@@ -41,6 +62,20 @@ var getMatchData = (matchId, callback) => {
         var playerIdentities = match.participantIdentities;
         callback(playerIdentities, targetMatch);
     });
+};
+
+var getAllMatchData = (matchIds, summonerId, callback) => {
+    var matchStats;
+    matchIds.forEach(function (element) {
+        var matchId = element;
+        lolapi.Match.get(matchId, (error, match) => {
+            if (error) throw error;
+            var targetMatch = match;
+            var playerIdentities = match.participantIdentities;
+            matchStats = getStatsById(summonerId, playerIdentities, targetMatch);
+            callback(matchStats);
+        });
+    }, this);
 };
 
 var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
@@ -55,7 +90,7 @@ var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
             var deaths = participantStats.deaths;
             var assists = participantStats.assists;
             var playerCs = participantStats.minionsKilled;
-            
+
             var playerKDA = 'Kills: ' + kills + ', Deaths: ' + deaths + ', Assists: ' + assists + ' , Creep Score: ' + playerCs;
             callback(playerKDA);
         }
@@ -66,7 +101,7 @@ var getSummonerStats = (summonerName, callback) => {
     var stats;
     getIdBySummoner(summonerName, (summonerId) => {
         // console.log('SUMMONER ID:', summonerId);
-        getMatchesBySummonerId(summonerId, (matchList) => {
+        getMatchBySummonerId(summonerId, (matchList) => {
             // console.log('MATCH LIST IDS:', matchList);
             getMatchData(matchList, (matchId, targetMatch) => {
                 // console.log('GET MATCH DATA:', matchId);
@@ -78,16 +113,29 @@ var getSummonerStats = (summonerName, callback) => {
             });
         });
     });
-    // console.log('RETURN CALL OF STATS:', stats);
 };
 
+var getWeeklySummonerStats = (summonerName, callback) => {
+    var stats;
+    getIdBySummoner(summonerName, (summonerId) => {
+        console.log('SUMMONER ID:', summonerId);
+        getMatchesBySummonerId(summonerId, (matchList) => {
+            console.log('MATCH LIST IDS:', matchList);
+            getAllMatchData(matchList, summonerId, (stats) => {
+                console.log('GET MATCH DATA:', stats);
+                callback(stats);
+            });
+        });
+    });
+};
 
 //export the functions
 module.exports = {
     region,
     getIdBySummoner,
-    getMatchesBySummonerId,
+    getMatchBySummonerId,
     getMatchData,
     getStatsById,
-    getSummonerStats
+    getSummonerStats,
+    getWeeklySummonerStats
 };
