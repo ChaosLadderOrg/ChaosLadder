@@ -66,14 +66,16 @@ var getMatchData = (matchId, callback) => {
 
 var getAllMatchData = (matchIds, summonerId, callback) => {
     var matchStats;
+    var test;
     matchIds.forEach(function (element) {
         var matchId = element;
         lolapi.Match.get(matchId, (error, match) => {
             if (error) throw error;
             var targetMatch = match;
             var playerIdentities = match.participantIdentities;
-            matchStats = getStatsById(summonerId, playerIdentities, targetMatch);
-            callback(matchStats);
+           getStatsById(summonerId, playerIdentities, targetMatch, (matchStats)=>{
+                callback(matchStats);
+            });
         });
     }, this);
 };
