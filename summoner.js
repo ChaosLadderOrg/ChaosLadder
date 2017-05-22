@@ -2,6 +2,8 @@ const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 var region = 'euw';
 const lolapi = require('./lolapi/lib/lolapi')(apiKey, region);
 
+var kdaList = [];
+
 var getIdBySummoner = (summonerName, data) => {
     var summonerId;
     //finds summonerId based on provided name
@@ -64,16 +66,14 @@ var getMatchData = (matchId, callback) => {
     });
 };
 
-var getAllMatchData = (matchIds, summonerId, callback) => {
-    var matchStats;
-    var test;
+var getAllPlayerMatchesStats = (matchIds, summonerId, callback) => {
     matchIds.forEach(function (element) {
         var matchId = element;
         lolapi.Match.get(matchId, (error, match) => {
             if (error) throw error;
             var targetMatch = match;
             var playerIdentities = match.participantIdentities;
-           getStatsById(summonerId, playerIdentities, targetMatch, (matchStats)=>{
+            getStatsById(summonerId, playerIdentities, targetMatch, (matchStats) => {
                 callback(matchStats);
             });
         });
@@ -93,14 +93,23 @@ var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
             var assists = participantStats.assists;
             var playerCs = participantStats.minionsKilled;
 
-            var playerKDA = 'Kills: ' + kills + ', Deaths: ' + deaths + ', Assists: ' + assists + ' , Creep Score: ' + playerCs;
-            callback(playerKDA);
+            var playerScore = 'Kills: ' + kills + ', Deaths: ' + deaths + ', Assists: ' + assists + ' , Creep Score: ' + playerCs;
+            console.log(playerScore);
+            var playerkda = Math.round((kills + assists) / deaths * 100) / 100;
+            kdaList.push(playerkda);
         }
     }, this);
+    callback(kdaList);
+};
+
+var summonerWeeklyKda = (kdaList, callback) => {
+    /* return the weekly summoner kda based on the overall KDA*/
+    var weeklyKda = kdaList.reduce(function (a, b) { return a + b; }, 0);
+    weeklyKda = Math.round(weeklyKda * 100) / 100;
+    callback(weeklyKda);
 };
 
 var getSummonerStats = (summonerName, callback) => {
-    var stats;
     getIdBySummoner(summonerName, (summonerId) => {
         // console.log('SUMMONER ID:', summonerId);
         getMatchBySummonerId(summonerId, (matchList) => {
@@ -109,8 +118,7 @@ var getSummonerStats = (summonerName, callback) => {
                 // console.log('GET MATCH DATA:', matchId);
                 getStatsById(summonerId, matchId, targetMatch, (playerStats) => {
                     console.log('PLAYER STATS BY ID:', playerStats);
-                    stats = playerStats;
-                    callback(stats);
+                    callback(playerStats);
                 });
             });
         });
@@ -118,14 +126,16 @@ var getSummonerStats = (summonerName, callback) => {
 };
 
 var getWeeklySummonerStats = (summonerName, callback) => {
-    var stats;
     getIdBySummoner(summonerName, (summonerId) => {
         console.log('SUMMONER ID:', summonerId);
         getMatchesBySummonerId(summonerId, (matchList) => {
             console.log('MATCH LIST IDS:', matchList);
-            getAllMatchData(matchList, summonerId, (stats) => {
+            getAllPlayerMatchesStats(matchList, summonerId, (stats) => {
                 console.log('GET MATCH DATA:', stats);
-                callback(stats);
+                summonerWeeklyKda(stats, (weeklyKda) => {
+                    console.log('WEEKLY KDA:', weeklyKda);
+                    callback(weeklyKda)
+                });
             });
         });
     });
