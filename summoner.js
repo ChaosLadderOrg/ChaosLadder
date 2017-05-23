@@ -2,14 +2,13 @@ const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 var region = 'euw';
 const lolapi = require('./lolapi/lib/lolapi')(apiKey, region);
 
-var kdaList = [];
 var getSummonerNameById = function (summonerId) {
     lolapi.Summoner.getName(summonerId, (error, summoner) => {
         if (error) {
             throw error;
         } else if (summonerId != null) {
             var summonerName = summoner[summonerId];
-            console.log(summonerName)
+            //console.log(summonerName)
             return summonerName;
         };
     });
@@ -61,7 +60,7 @@ var getMatchesBySummonerId = (summonerId, callback) => {
             matchIds.push(element.matchId);
             // matchIds[element].push(matches.matchId);
         }, this);
-        console.log(matchIds);
+        //console.log(matchIds);
         callback(matchIds);
     });
 };
@@ -77,26 +76,29 @@ var getMatchData = (matchId, callback) => {
 };
 
 var getAllPlayerMatchesStats = (matchIds, summonerId, callback) => {
+    var kdaList = [];
     matchIds.forEach(function (element) {
         var matchId = element;
         lolapi.Match.get(matchId, (error, match) => {
             if (error) throw error;
             var targetMatch = match;
             var playerIdentities = match.participantIdentities;
-            getStatsById(summonerId, playerIdentities, targetMatch, (matchStats) => {
+            getStatsById(kdaList, summonerId, playerIdentities, targetMatch, (matchStats) => {
                 callback(matchStats);
             });
         });
     }, this);
 };
 
-var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
+var getStatsById = (kdaList, summonerId, playerIdentities, targetMatch, callback) => {
     //iterates over the match participants
+
     playerIdentities.forEach(function (element) {
         //searches for a matching summonerId 
         if (element.player.summonerId == summonerId) {
+            //console.log(kdaList);
             var targetPlayerID = element.participantId - 1;
-            console.log('TARGET PLAYER ID:', targetPlayerID);
+            //console.log('TARGET PLAYER ID:', targetPlayerID);
             var participantStats = targetMatch.participants[targetPlayerID].stats;
             var kills = participantStats.kills;
             var deaths = participantStats.deaths;
@@ -104,11 +106,19 @@ var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
             var playerCs = participantStats.minionsKilled;
 
             var playerScore = 'Kills: ' + kills + ', Deaths: ' + deaths + ', Assists: ' + assists + ' , Creep Score: ' + playerCs;
-            console.log(playerScore);
-            var playerkda = Math.round((kills + assists) / deaths * 100) / 100;
-            kdaList.push(playerkda);
+            if (deaths == 0) {
+                var playerkda = Math.round((kills + assists) * 100) / 100;
+                kdaList.push(playerkda);
+            }
+            else if (deaths > 0){
+               var playerkda = Math.round((kills + assists) / deaths * 100) / 100;
+               kdaList.push(playerkda);
+            }
 
-            if (kdaList.length == 5) { callback(kdaList); };
+            if (kdaList.length == 5) {
+                //console.log(kdaList);
+                callback(kdaList);
+            };
         }
     }, this);
 };
@@ -152,6 +162,20 @@ var getWeeklySummonerStats = (summonerName, callback) => {
     });
 };
 
+var getWeeklySummonerStatsById = (summonerId, callback) => {
+    // console.log('SUMMONER ID:', summonerId);
+    getMatchesBySummonerId(summonerId, (matchList) => {
+        // console.log('MATCH LIST IDS:', matchList);
+        getAllPlayerMatchesStats(matchList, summonerId, (stats) => {
+            // console.log('GET MATCH DATA:', stats);
+            summonerWeeklyKda(stats, (weeklyKda) => {
+                // console.log('WEEKLY KDA:', weeklyKda);
+                callback(weeklyKda)
+            });
+        });
+    });
+};
+
 //export the functions
 module.exports = {
     region,
@@ -160,5 +184,6 @@ module.exports = {
     getMatchData,
     getStatsById,
     getSummonerStats,
-    getSummonerNameById
+    getSummonerNameById,
+    getWeeklySummonerStatsById
 };

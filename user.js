@@ -31,7 +31,7 @@ var createUser = (userEmail, userPassword, userSummonerName, userRegion, callbac
 var getAllUsers = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     userModel.find().exec(function (error, userList) {
-        console.log('GET ALL USERS', userList);
+        // console.log('GET ALL USERS', userList);
         callback(userList);
     });
 };
@@ -47,5 +47,6 @@ var getAllUsers = (callback) => {
 module.exports = {
     user,
     userModel,
-    createUser
+    createUser,
+    getAllUsers
 };
