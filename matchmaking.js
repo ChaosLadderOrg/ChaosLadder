@@ -1,5 +1,5 @@
 const { mongoose, Schema, db } = require('./mongoose.js');
-const { getMatchesBySummonerId, getMatchData, getStatsById } = require('./summoner.js');
+const { getSummonerNameById, getMatchesBySummonerId, getMatchData, getStatsById } = require('./summoner.js');
 const { user, userModel } = require('./user.js');
 const matchmaking = Schema({
     weekNumber: Number,
@@ -71,14 +71,25 @@ createMatchList((weeklyList) => {
 var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchedPairs.forEach(function (element) {
-        // console.log(element);
+        var player1Name, player2Name;
+        getSummonerNameById(element.player1, (summonerId) =>{
+            console.log('FROM GET SUMMONER BY ID 1', summonerId);
+            player1Name = summonerId;
+        });
+        getSummonerNameById(element.player2, (summonerId) =>{
+            console.log('FROM GET SUMMONER BY ID 2',summonerId)
+            player2Name = summonerId;
+        });
+
         var matchInsert = new matchmakingModel({
             weekNumber: 1,
             players: [{
-                summonerID: element.player1
+                summonerID: element.player1,
+                summonerName: player1Name
             },
             {
-                summonerID: element.player2
+                summonerID: element.player2,
+                summonerName: player2Name
             }]
         });
         console.log(matchInsert);
