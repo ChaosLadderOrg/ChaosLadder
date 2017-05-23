@@ -1,19 +1,16 @@
 const { mongoose, Schema, db } = require('./mongoose.js');
-const { getAllUsers } = require('./user.js');
 const { getWeeklySummonerStatsById } = require('./summoner.js');
 const { getWeekNumber } = require('./schedule.js');
-var players = [];
+const { matchmakingModel, getAllIds } = require('./matchmaking.js');
 const leaderboard = Schema({
-    weekNumber: Number,
-    players: [{
-        summonerID: Number,
-        summonerName: String,
-        kda: Number,
-        creepScore: Number,
-        position: Number
-    }]
+    summonerID: Number,
+    wins: Number,
+    position: Number
 });
 const leaderboardModel = mongoose.model('leaderboard', leaderboard);
+
+var players = [];
+
 var createLeaderboard = (callback) => {
     getAllUsers((userList) => {
         userList.forEach(function (element) {
@@ -23,7 +20,7 @@ var createLeaderboard = (callback) => {
                 console.log(players);
             })
         }, this)
-        
+
         //TODO: replace test data with the actual data
         var leaderboardInsert = new leaderboardModel({
             weekNumber: getWeekNumber(),
@@ -44,4 +41,59 @@ var createLeaderboard = (callback) => {
         })
     })
 };
-createLeaderboard();
+
+
+/* 
+       retrieve all users,
+       check how many wins each user has from the matchmaking db (foreach win = win++)
+       put them into a collection
+       sort the collection based on highest amount of wins 
+        */
+
+var victoryCounter = (victoryCount) => {
+    var summonerId;
+
+    getAllIds((userList) => {
+        userList.forEach(function (element) {
+            summonerId = element.summonerID;
+            something(summonerId, (conf) =>{
+                victoryCount(conf);
+            });
+        }, this)
+    });
+};
+
+
+var something = (summonerId, wins) => {
+    matchmakingModel.find().exec(function (error, matches) {
+        var wins = 0;
+        matches.forEach(function (element) {
+            console.log(element.players);
+            if (element.players[0].summonerID == summonerId && element.players[0].winner == true) {
+                wins++;
+
+            } else if (element.players[1].summonerID == summonerId && element.players[1].winner == true) {
+                wins++;
+            }
+        }, this);
+        
+        var leaderboardInsert = new leaderboardModel({
+            summonerID: summonerId,
+            wins: wins
+        });
+        console.log(leaderboardInsert);
+        leaderboardInsert.save(function (error) {
+            if (error) throw error;
+            console.log('LEADERBOARD INSERT', leaderboardInsert);
+        });
+    });
+};
+
+victoryCounter((victories) => {
+    console.log(victories)
+});
+
+
+
+
+

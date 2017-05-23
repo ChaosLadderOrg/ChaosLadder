@@ -21,14 +21,9 @@ var matchedPairs = [];
 var name1;
 var name2;
 
-// getAllUsers((usersList) => {
-//     console.log(usersList);
-// });
-
 var getAllIds = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     userModel.find({}, 'summonerID').exec(function (error, summonerIdList) {
-        console.log('SUMMONER ID LIST', summonerIdList);
         callback(summonerIdList);
     });
 };
@@ -42,7 +37,6 @@ var createMatchList = (callback) => {
         summonerIdList.forEach(function (element) {
             playerList.push(element.summonerID);
         }, this);
-        // console.log(playerList);
         var playerList1 = playerList.slice(),
             playerList2 = playerList.slice();
 
@@ -56,7 +50,6 @@ var createMatchList = (callback) => {
                 name2 = playerList2.pop();
             }
             playerList2.shift();
-            // console.log(name1 + ' gets ' + name2);
             matchedPairs.push({ player1: name1, player2: name2 });
             var index2 = playerList2.indexOf(name1);
             var index1 = playerList1.indexOf(name2);
@@ -69,9 +62,9 @@ var createMatchList = (callback) => {
     });
 };
 
-createMatchList((weeklyList) => {
-    // console.log(weeklyList);
-});
+// createMatchList((weeklyList) => {
+//     // console.log(weeklyList);
+// });
 
 var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
@@ -98,12 +91,6 @@ var createMatches = (matchedPairs, (callback) => {
 module.exports = {
     matchmaking,
     matchmakingModel,
-    createMatchList
+    createMatchList,
+    getAllIds
 };
-
-/* TODO:
-(if not enough users for pairs, just give a random user a free win or a break this week)
-2.Retreive match list of the first 5 ranked games (solo 5v5) after a certain point between a certain point.
-*/
-
-

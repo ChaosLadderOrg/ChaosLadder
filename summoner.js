@@ -60,7 +60,6 @@ var getMatchesBySummonerId = (summonerId, callback) => {
             matchIds.push(element.matchId);
             // matchIds[element].push(matches.matchId);
         }, this);
-        //console.log(matchIds);
         callback(matchIds);
     });
 };
