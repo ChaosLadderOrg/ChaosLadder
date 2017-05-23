@@ -1,4 +1,5 @@
 const { mongoose, Schema, db } = require('./mongoose.js');
+const { getWeekNumber } = require('./schedule.js');
 const { getMatchesBySummonerId, getMatchData, getStatsById } = require('./summoner.js');
 const { user, userModel } = require('./user.js');
 const matchmaking = Schema({
@@ -19,30 +20,11 @@ var playerList = [];
 var matchedPairs = [];
 var name1;
 var name2;
-Date.prototype.getWeekNumber = function(){
-    var d = new Date(+this);
-    d.setHours(0,0,0,0);
-    d.setDate(d.getDate()+4-(d.getDay()||7));
-    return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
-};
-Date.prototype.addDays = function(days) {
-  var dat = new Date(this.valueOf());
-  dat.setDate(dat.getDate() + days);
-  return dat;
-}
+
 // getAllUsers((usersList) => {
 //     console.log(usersList);
 // });
-function getDateOfISOWeek(w, y) {
-    var simple = new Date(y, 0, 1 + (w - 1) * 7);
-    var dow = simple.getDay();
-    var ISOweekStart = simple;
-    if (dow <= 4)
-        ISOweekStart.setDate(simple.getDate() - simple.getDay() + 1);
-    else
-        ISOweekStart.setDate(simple.getDate() + 8 - simple.getDay());
-    return ISOweekStart;
-}
+
 var getAllIds = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     userModel.find({}, 'summonerID').exec(function (error, summonerIdList) {
@@ -88,28 +70,17 @@ var createMatchList = (callback) => {
     });
 };
 
-function showTime (){
-var week = new Date().getWeekNumber();
-var year = new Date().getFullYear();
-var startDate = getDateOfISOWeek(week, year);
-var endDate = getDateOfISOWeek(week, year).addDays(7);
-console.log(startDate);
-console.log(endDate);
-console.log(startDate.getTime());
-console.log(endDate.getTime());
-// console.log()
-};
-showTime();
-// createMatchList((weeklyList) => {
-//     // console.log(weeklyList);
-// });
+
+createMatchList((weeklyList) => {
+    // console.log(weeklyList);
+});
 
 var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchedPairs.forEach(function (element) {
         // console.log(element);
         var matchInsert = new matchmakingModel({
-            weekNumber: new Date().getWeekNumber(),
+            weekNumber: getWeekNumber(),
             players: [{
                 summonerID: element.player1
             },
@@ -136,10 +107,4 @@ module.exports = {
 2.Retreive match list of the first 5 ranked games (solo 5v5) after a certain point between a certain point.
 */
 
-// var startDate = new Date("May 12, 2017 00:00:00"); // Your timezone!
-// var startEpoch = startDate.getTime();
-// console.log(startEpoch);
 
-// var endDate = new Date("May 19, 2017 00:00:00"); // Your timezone!
-// var endEpoch = endDate.getTime();
-// console.log(endEpoch);
