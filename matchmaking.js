@@ -34,7 +34,7 @@ var getAllIds = (callback) => {
 
 var createMatchList = (callback) => {
     getAllIds((summonerIdList) => {
-        if (summonerIdList.length%2==1)
+        if (summonerIdList.length % 2 == 1)
         {
             summonerIdList.sort(function () { return 0.5 - Math.random(); })
             summonerIdList.pop();

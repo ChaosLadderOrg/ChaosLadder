@@ -44,13 +44,13 @@ getWeeklySummonerStats(sumName, (stats) => {
 
 /*
 TODO Main Functionality as modules:
-2.Match list of the first ranked 5 games (solo 5v5) after a certain point.
+2.Match list of the first ranked 5 games (solo 5v5) after a certain point. +++++
 3.Retrieve champion information and store it in JSON file
 4.Display champion pictures
 
 6.Create Leaderboard based on the players who sign up for the tournament
-7.KDA, points and etc. estimator
-8.Create matchmaking system, which every week places two players against each other.
+7.KDA, points and etc. estimator +++++
+8.Create matchmaking system, which every week places two players against each other. +++++
 
 a)TODO make a for-each loop to iterate through arr and pass it to the getChampion
 */
