@@ -13,7 +13,6 @@ var password = '123eerr11';
 var sumName = 'hellking007';
 var accountRegion = 'euw';
 
-
 getWeeklySummonerStats(sumName, (stats) => {
         console.log(stats);
          });
@@ -26,7 +25,7 @@ getWeeklySummonerStats(sumName, (stats) => {
 //     createUser(email, password, sumName, accountRegion, (confirmation) => {
 //         console.log(confirmation);
 //         res.status(200).send('CREATE USER CALLBACK', confirmation);
-        
+
 //     });
 // });
 

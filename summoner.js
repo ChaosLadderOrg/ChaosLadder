@@ -4,15 +4,15 @@ const lolapi = require('./lolapi/lib/lolapi')(apiKey, region);
 
 var kdaList = [];
 var getSummonerNameById = function (summonerId) {
-     lolapi.Summoner.getName(summonerId, (error, summoner) => {
+    lolapi.Summoner.getName(summonerId, (error, summoner) => {
         if (error) {
             throw error;
         } else if (summonerId != null) {
-            var summonerName = summoner[summonerId].name;
+            var summonerName = summoner[summonerId];
             console.log(summonerName)
             return summonerName;
         };
-    });  
+    });
 };
 
 var getIdBySummoner = (summonerName, data) => {
@@ -160,4 +160,5 @@ module.exports = {
     getMatchData,
     getStatsById,
     getSummonerStats,
+    getSummonerNameById
 };

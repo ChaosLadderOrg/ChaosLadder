@@ -35,8 +35,7 @@ var getAllIds = (callback) => {
 
 var createMatchList = (callback) => {
     getAllIds((summonerIdList) => {
-        if (summonerIdList.length % 2 == 1)
-        {
+        if (summonerIdList.length % 2 == 1) {
             summonerIdList.sort(function () { return 0.5 - Math.random(); })
             summonerIdList.pop();
         }
@@ -70,7 +69,6 @@ var createMatchList = (callback) => {
     });
 };
 
-
 createMatchList((weeklyList) => {
     // console.log(weeklyList);
 });
@@ -78,17 +76,6 @@ createMatchList((weeklyList) => {
 var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchedPairs.forEach(function (element) {
-
-        // var player1Name, player2Name;
-        // getSummonerNameById(element.player1, (summonerId) =>{
-        //     console.log('FROM GET SUMMONER BY ID 1', summonerId);
-        //     player1Name = summonerId;
-        // });
-        // getSummonerNameById(element.player2, (summonerId) =>{
-        //     console.log('FROM GET SUMMONER BY ID 2',summonerId)
-        //     player2Name = summonerId;
-        // });
-
         var matchInsert = new matchmakingModel({
             weekNumber: getWeekNumber(),
             players: [{
