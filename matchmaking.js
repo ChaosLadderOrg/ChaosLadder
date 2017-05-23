@@ -19,7 +19,12 @@ var playerList = [];
 var matchedPairs = [];
 var name1;
 var name2;
-
+Date.prototype.getWeekNumber = function(){
+    var d = new Date(+this);
+    d.setHours(0,0,0,0);
+    d.setDate(d.getDate()+4-(d.getDay()||7));
+    return Math.ceil((((d-new Date(d.getFullYear(),0,1))/8.64e7)+1)/7);
+};
 // getAllUsers((usersList) => {
 //     console.log(usersList);
 // });
@@ -78,7 +83,7 @@ var createMatches = (matchedPairs, (callback) => {
     matchedPairs.forEach(function (element) {
         // console.log(element);
         var matchInsert = new matchmakingModel({
-            weekNumber: 1,
+            weekNumber: new Date().getWeekNumber(),
             players: [{
                 summonerID: element.player1
             },
