@@ -2,17 +2,16 @@ const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 var region = 'euw';
 const lolapi = require('./lolapi/lib/lolapi')(apiKey, region);
 
-var getSummonerNameById = (summonerId, callback) => {
-    //finds summonerId based on provided name
-    lolapi.Summoner.getName(summonerId, (error, summoner) => {
+var getSummonerNameById = function (summonerId) {
+     lolapi.Summoner.getName(summonerId, (error, summoner) => {
         if (error) {
             throw error;
         } else if (summonerId != null) {
             var summonerName = summoner[summonerId].name;
             console.log(summonerName)
-            callback(summonerName);
+            return summonerName;
         };
-    });
+    });  
 };
 
 var getIdBySummoner = (summonerName, data) => {
