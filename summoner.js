@@ -97,9 +97,10 @@ var getStatsById = (summonerId, playerIdentities, targetMatch, callback) => {
             console.log(playerScore);
             var playerkda = Math.round((kills + assists) / deaths * 100) / 100;
             kdaList.push(playerkda);
+
+            if (kdaList.length == 5) { callback(kdaList); };
         }
     }, this);
-    callback(kdaList);
 };
 
 var summonerWeeklyKda = (kdaList, callback) => {
