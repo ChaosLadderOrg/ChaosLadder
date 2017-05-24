@@ -41,28 +41,23 @@ var createLeaderboard = (callback) => {
         })
     })
 };
-
-
-/* 
-       retrieve all users,
+/* retrieve all users,
        check how many wins each user has from the matchmaking db (foreach win = win++)
        put them into a collection
        sort the collection based on highest amount of wins 
         */
-
 var victoryCounter = (victoryCount) => {
     var summonerId;
 
     getAllIds((userList) => {
         userList.forEach(function (element) {
             summonerId = element.summonerID;
-            something(summonerId, (conf) =>{
+            something(summonerId, (conf) => {
                 victoryCount(conf);
             });
         }, this)
     });
 };
-
 
 var something = (summonerId, wins) => {
     matchmakingModel.find().exec(function (error, matches) {
@@ -76,7 +71,7 @@ var something = (summonerId, wins) => {
                 wins++;
             }
         }, this);
-        
+
         var leaderboardInsert = new leaderboardModel({
             summonerID: summonerId,
             wins: wins

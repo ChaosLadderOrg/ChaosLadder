@@ -2,14 +2,14 @@ const apiKey = 'RGAPI-c9db71b0-bb76-414b-af32-37030983e82b';
 var region = 'euw';
 const lolapi = require('./lolapi/lib/lolapi')(apiKey, region);
 
-var getSummonerNameById = function (summonerId) {
+var getSummonerNameById = (summonerId, callback) => {
     lolapi.Summoner.getName(summonerId, (error, summoner) => {
         if (error) {
             throw error;
-        } else if (summonerId != null) {
+        } else if (summonerId !== null) {
             var summonerName = summoner[summonerId];
-            //console.log(summonerName)
-            return summonerName;
+            console.log(summonerName)
+            callback(summonerName);
         };
     });
 };
@@ -91,7 +91,6 @@ var getAllPlayerMatchesStats = (matchIds, summonerId, callback) => {
 
 var getStatsById = (kdaList, summonerId, playerIdentities, targetMatch, callback) => {
     //iterates over the match participants
-
     playerIdentities.forEach(function (element) {
         //searches for a matching summonerId 
         if (element.player.summonerId == summonerId) {
@@ -103,17 +102,15 @@ var getStatsById = (kdaList, summonerId, playerIdentities, targetMatch, callback
             var deaths = participantStats.deaths;
             var assists = participantStats.assists;
             var playerCs = participantStats.minionsKilled;
-
             var playerScore = 'Kills: ' + kills + ', Deaths: ' + deaths + ', Assists: ' + assists + ' , Creep Score: ' + playerCs;
             if (deaths == 0) {
                 var playerkda = Math.round((kills + assists) * 100) / 100;
                 kdaList.push(playerkda);
             }
-            else if (deaths > 0){
+            else if (deaths > 0) {
                var playerkda = Math.round((kills + assists) / deaths * 100) / 100;
                kdaList.push(playerkda);
-            }
-
+            };
             if (kdaList.length == 5) {
                 //console.log(kdaList);
                 callback(kdaList);

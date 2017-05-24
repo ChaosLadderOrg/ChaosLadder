@@ -57,34 +57,47 @@ var createMatchList = (callback) => {
             if (playerList1.indexOf(name2) >= 0) playerList1.splice(index1, 1);
         }
         createMatches(matchedPairs);
-        console.log('MATCHED PAIRS', matchedPairs);
+        // console.log('MATCHED PAIRS', matchedPairs);
         callback(matchedPairs);
     });
 };
+createMatchList((weeklyList) => {
+    // console.log(weeklyList);
+});
 
-// createMatchList((weeklyList) => {
-//     // console.log(weeklyList);
-// });
-
+/* ZYGI: WE DO NOT NEED THE SUMMONER NAMES AT ALL HERE
+BORIS: I AGREE, WE WILL JUST HAVE THE SUMMONER ID AND RETRIEVE THE NAME WHEREVER NEEDED */
 var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchedPairs.forEach(function (element) {
-        var matchInsert = new matchmakingModel({
-            weekNumber: getWeekNumber(),
-            players: [{
-                summonerID: element.player1,
-                summonerName: getSummonerNameById(element.player1)
-            },
-            {
-                summonerID: element.player2,
-                summonerName: getSummonerNameById(element.player2)
-            }]
+
+        var player1Name, player2Name;
+
+        getSummonerNameById(element.player1, (sumName1) => {
+            player1Name = sumName1;
         });
-        console.log(matchInsert);
-        matchInsert.save(function (error) {
-            if (error) throw error;
-            console.log('MATCH INSERT');
+        getSummonerNameById(element.player2, (sumName2) => {
+            player2Name = sumName2
         });
+        console.log(player1Name, player2Name);
+
+        if (player1Name !== null && player2Name !== null) {
+            var matchInsert = new matchmakingModel({
+                weekNumber: getWeekNumber(),
+                players: [{
+                    summonerID: element.player1,
+                    summonerName: player1Name
+                },
+                {
+                    summonerID: element.player2,
+                    summonerName: player2Name
+                }]
+            });
+            matchInsert.save(function (error) {
+                if (error) throw error;
+                console.log('MATCH INSERT', matchInsert);
+            });
+        }
     }, this);
 });
 
