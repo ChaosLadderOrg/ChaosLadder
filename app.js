@@ -38,8 +38,9 @@ app.post('/createuser', (req, res) => {
         });
 });
 
-app.get('/getstats', (req, res) => {
-        getWeeklySummonerStats(sumName, (stats) => {
+app.put('/getstats', (req, res) => {
+        console.log(req.body.sumName);
+        getWeeklySummonerStats(req.body.sumName, (stats) => {
                 console.log(stats);
                 res.status(200);
                 res.json(stats);

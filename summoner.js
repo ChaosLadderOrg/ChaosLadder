@@ -21,7 +21,7 @@ var getIdBySummoner = (summonerName, data) => {
         if (error) {
             throw error;
         } else if (summonerName != null) {
-            summonerId = summoner[summonerName].id;
+            summonerId = summoner[summonerName.toLowerCase()].id;
             data(summonerId);
         };
     });
