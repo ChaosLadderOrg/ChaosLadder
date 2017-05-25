@@ -16,8 +16,8 @@ const matchmaking = Schema({
 });
 const matchmakingModel = mongoose.model('matchmaking', matchmaking);
 
-var playerList = [];
-var matchedPairs = [];
+    var playerList = [];
+    var matchedPairs = [];
 var name1;
 var name2;
 
@@ -29,6 +29,8 @@ var getAllIds = (callback) => {
 };
 
 var createMatchList = (callback) => {
+    matchedPairs = [];
+    playerList = [];
     getAllIds((summonerIdList) => {
         if (summonerIdList.length % 2 == 1) {
             summonerIdList.sort(function () { return 0.5 - Math.random(); })
@@ -61,9 +63,9 @@ var createMatchList = (callback) => {
         callback(matchedPairs);
     });
 };
-createMatchList((weeklyList) => {
-    // console.log(weeklyList);
-});
+// createMatchList((weeklyList) => {
+//     // console.log(weeklyList);
+// });
 
 /* ZYGI: WE DO NOT NEED THE SUMMONER NAMES AT ALL HERE
 BORIS: I AGREE, WE WILL JUST HAVE THE SUMMONER ID AND RETRIEVE THE NAME WHEREVER NEEDED */
@@ -79,7 +81,7 @@ var createMatches = (matchedPairs, (callback) => {
         getSummonerNameById(element.player2, (sumName2) => {
             player2Name = sumName2
         });
-        console.log(player1Name, player2Name);
+        //console.log(player1Name, player2Name);
 
         if (player1Name !== null && player2Name !== null) {
             var matchInsert = new matchmakingModel({

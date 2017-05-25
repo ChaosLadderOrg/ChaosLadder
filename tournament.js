@@ -84,9 +84,9 @@ var something = (summonerId, wins) => {
     });
 };
 
-victoryCounter((victories) => {
-    console.log(victories)
-});
+// victoryCounter((victories) => {
+//     console.log(victories)
+// });
 
 
 

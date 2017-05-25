@@ -181,5 +181,6 @@ module.exports = {
     getStatsById,
     getSummonerStats,
     getSummonerNameById,
-    getWeeklySummonerStatsById
+    getWeeklySummonerStatsById,
+    getWeeklySummonerStats
 };
