@@ -9,7 +9,7 @@ var bodyParser = require('body-parser')
 
 const { getSummonerStats, getWeeklySummonerStats } = require('./summoner.js');
 const { createUser } = require('./user.js');
-const { createMatchList } = require('./matchmaking.js');
+const { createMatchList, getMatches } = require('./matchmaking.js');
 
 var email = 'liko@liko.com';
 var password = '123eerr11';
@@ -23,7 +23,9 @@ var accountRegion = 'euw';
 // createUser(email, password, sumName, accountRegion, (confirmation) => {
 //         console.log(confirmation);
 //          });
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({
+        extended: true
+}));
 app.use(bodyParser.json());
 
 
@@ -41,6 +43,13 @@ app.get('/getstats', (req, res) => {
                 console.log(stats);
                 res.status(200);
                 res.json(stats);
+        });
+});
+
+app.get('/getmatches', (req, res) => {
+        getMatches((matchlist) => {
+                res.status(200);
+                res.json(matchlist);
         });
 });
 

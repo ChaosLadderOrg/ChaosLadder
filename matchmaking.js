@@ -16,8 +16,8 @@ const matchmaking = Schema({
 });
 const matchmakingModel = mongoose.model('matchmaking', matchmaking);
 
-    var playerList = [];
-    var matchedPairs = [];
+var playerList = [];
+var matchedPairs = [];
 var name1;
 var name2;
 
@@ -27,7 +27,12 @@ var getAllIds = (callback) => {
         callback(summonerIdList);
     });
 };
-
+var getMatches = (callback) => {
+    db.on('error', console.error.bind(console, 'connection error:'));
+    matchmakingModel.find().exec(function (error, matchList) {
+        callback(matchList);
+    })
+};
 var createMatchList = (callback) => {
     matchedPairs = [];
     playerList = [];
@@ -107,5 +112,6 @@ module.exports = {
     matchmaking,
     matchmakingModel,
     createMatchList,
-    getAllIds
+    getAllIds,
+    getMatches
 };
