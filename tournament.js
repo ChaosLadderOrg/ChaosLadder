@@ -82,13 +82,16 @@ var something = (summonerId, wins) => {
             console.log('LEADERBOARD INSERT', leaderboardInsert);
         });
     });
+    wins();
 };
 
 // victoryCounter((victories) => {
 //     console.log(victories)
 // });
 
-
+module.exports = {
+    victoryCounter
+};
 
 
 

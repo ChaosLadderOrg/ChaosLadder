@@ -3,10 +3,11 @@
 // const argv = yargs.argv;
 
 const express = require('express');
+const bodyParser = require('body-parser');
+
 var app = express();
-var bodyParser = require('body-parser')
 
-
+const { victoryCounter } = require('./tournament.js');
 const { getSummonerStats, getWeeklySummonerStats } = require('./summoner.js');
 const { createUser } = require('./user.js');
 const { createMatchList, getMatches } = require('./matchmaking.js');
@@ -51,6 +52,13 @@ app.get('/getmatches', (req, res) => {
         getMatches((matchlist) => {
                 res.status(200);
                 res.json(matchlist);
+        });
+});
+
+app.get('/createleaderboard', (req, res) => {
+        victoryCounter((leaderboard) => {
+                res.status(200);
+                res.json(leaderboard);
         });
 });
 
