@@ -56,7 +56,7 @@ app.get('/getmatches', (req, res) => {
 });
 
 app.get('/getleaderboard', (req, res) => {
-        getMatches((leaderboard) => {
+        getLeaderboard((leaderboard) => {
                 res.status(200);
                 res.json(leaderboard);
         });
