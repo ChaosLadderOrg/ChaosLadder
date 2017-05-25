@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 var app = express();
 
-const { victoryCounter } = require('./tournament.js');
+const { victoryCounter, getLeaderboard } = require('./tournament.js');
 const { getSummonerStats, getWeeklySummonerStats } = require('./summoner.js');
 const { createUser } = require('./user.js');
 const { createMatchList, getMatches } = require('./matchmaking.js');
@@ -52,6 +52,13 @@ app.get('/getmatches', (req, res) => {
         getMatches((matchlist) => {
                 res.status(200);
                 res.json(matchlist);
+        });
+});
+
+app.get('/getleaderboard', (req, res) => {
+        getMatches((leaderboard) => {
+                res.status(200);
+                res.json(leaderboard);
         });
 });
 

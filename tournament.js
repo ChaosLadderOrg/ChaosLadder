@@ -88,9 +88,15 @@ var something = (summonerId, wins) => {
 // victoryCounter((victories) => {
 //     console.log(victories)
 // });
-
+var getLeaderboard = (callback) => {
+    db.on('error', console.error.bind(console, 'connection error:'));
+    leaderboardModel.find().exec(function (error, leaderboard) {
+        callback(leaderboard);
+    })
+};
 module.exports = {
-    victoryCounter
+    victoryCounter,
+    getLeaderboard
 };
 
 
