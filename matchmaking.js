@@ -27,12 +27,14 @@ var getAllIds = (callback) => {
         callback(summonerIdList);
     });
 };
+
 var getMatches = (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchmakingModel.find().exec(function (error, matchList) {
         callback(matchList);
     })
 };
+
 var createMatchList = (callback) => {
     matchedPairs = [];
     playerList = [];
@@ -64,16 +66,10 @@ var createMatchList = (callback) => {
             if (playerList1.indexOf(name2) >= 0) playerList1.splice(index1, 1);
         }
         createMatches(matchedPairs);
-        // console.log('MATCHED PAIRS', matchedPairs);
         callback(matchedPairs);
     });
 };
-// createMatchList((weeklyList) => {
-//     // console.log(weeklyList);
-// });
 
-/* ZYGI: WE DO NOT NEED THE SUMMONER NAMES AT ALL HERE
-BORIS: I AGREE, WE WILL JUST HAVE THE SUMMONER ID AND RETRIEVE THE NAME WHEREVER NEEDED */
 var createMatches = (matchedPairs, (callback) => {
     db.on('error', console.error.bind(console, 'connection error:'));
     matchedPairs.forEach(function (element) {
@@ -86,18 +82,15 @@ var createMatches = (matchedPairs, (callback) => {
         getSummonerNameById(element.player2, (sumName2) => {
             player2Name = sumName2
         });
-        //console.log(player1Name, player2Name);
 
         if (player1Name !== null && player2Name !== null) {
             var matchInsert = new matchmakingModel({
                 weekNumber: getWeekNumber(),
                 players: [{
                     summonerID: element.player1,
-                    summonerName: player1Name
                 },
                 {
                     summonerID: element.player2,
-                    summonerName: player2Name
                 }]
             });
             matchInsert.save(function (error) {

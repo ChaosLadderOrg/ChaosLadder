@@ -44,10 +44,6 @@ var getMatchBySummonerId = (summonerId, callback) => {
 //Get a range of matches and their data
 var getMatchesBySummonerId = (summonerId, callback) => {
     var options = {
-        // championIds: 412,
-        // rankedQueues: ['RANKED_SOLO_5X5'],
-        // beginTime: 1494540000000,
-        // endTime: 1495144800000,
         beginIndex: 0,
         endIndex: 5
     };
@@ -58,7 +54,6 @@ var getMatchesBySummonerId = (summonerId, callback) => {
         var matchIds = [];
         matches.forEach(function (element) {
             matchIds.push(element.matchId);
-            // matchIds[element].push(matches.matchId);
         }, this);
         callback(matchIds);
     });
@@ -94,9 +89,8 @@ var getStatsById = (kdaList, summonerId, playerIdentities, targetMatch, callback
     playerIdentities.forEach(function (element) {
         //searches for a matching summonerId 
         if (element.player.summonerId == summonerId) {
-            //console.log(kdaList);
             var targetPlayerID = element.participantId - 1;
-            //console.log('TARGET PLAYER ID:', targetPlayerID);
+
             var participantStats = targetMatch.participants[targetPlayerID].stats;
             var kills = participantStats.kills;
             var deaths = participantStats.deaths;
@@ -112,7 +106,6 @@ var getStatsById = (kdaList, summonerId, playerIdentities, targetMatch, callback
                kdaList.push(playerkda);
             };
             if (kdaList.length == 5) {
-                //console.log(kdaList);
                 callback(kdaList);
             };
         }
@@ -128,11 +121,8 @@ var summonerWeeklyKda = (kdaList, callback) => {
 
 var getSummonerStats = (summonerName, callback) => {
     getIdBySummoner(summonerName, (summonerId) => {
-        // console.log('SUMMONER ID:', summonerId);
         getMatchBySummonerId(summonerId, (matchList) => {
-            // console.log('MATCH LIST IDS:', matchList);
             getMatchData(matchList, (matchId, targetMatch) => {
-                // console.log('GET MATCH DATA:', matchId);
                 getStatsById(summonerId, matchId, targetMatch, (playerStats) => {
                     console.log('PLAYER STATS BY ID:', playerStats);
                     callback(playerStats);
