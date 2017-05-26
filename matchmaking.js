@@ -76,13 +76,6 @@ var createMatches = (matchedPairs, (callback) => {
 
         var player1Name, player2Name;
 
-        getSummonerNameById(element.player1, (sumName1) => {
-            player1Name = sumName1;
-        });
-        getSummonerNameById(element.player2, (sumName2) => {
-            player2Name = sumName2
-        });
-
         if (player1Name !== null && player2Name !== null) {
             var matchInsert = new matchmakingModel({
                 weekNumber: getWeekNumber(),
