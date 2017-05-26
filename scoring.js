@@ -1,4 +1,0 @@
-/*
-TODO
-make a summoner KDA comparisson to determine winner
-*/

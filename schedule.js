@@ -22,19 +22,6 @@ function getDateOfISOWeek(w, y) {
     return ISOweekStart;
 }
 
-// function showTime() {
-//     var week = new Date().getWeekNumber();
-//     var year = new Date().getFullYear();
-//     var startDate = getDateOfISOWeek(week, year);
-//     var endDate = getDateOfISOWeek(week, year).addDays(7);
-//     console.log(startDate);
-//     console.log(endDate);
-//     console.log(startDate.getTime());
-//     console.log(endDate.getTime());
-//     // console.log()
-// };
-// showTime();
-
 var getWeekNumber = function () {
     return weeknumber = new Date().getWeekNumber();
 };
@@ -42,11 +29,3 @@ var getWeekNumber = function () {
 module.exports = {
     getWeekNumber
 };
-
-// var startDate = new Date("May 12, 2017 00:00:00"); // Your timezone!
-// var startEpoch = startDate.getTime();
-// console.log(startEpoch);
-
-// var endDate = new Date("May 19, 2017 00:00:00"); // Your timezone!
-// var endEpoch = endDate.getTime();
-// console.log(endEpoch);

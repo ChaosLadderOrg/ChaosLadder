@@ -35,14 +35,6 @@ var getAllUsers = (callback) => {
     });
 };
 
-// getAllUsers((userList) => {
-//     // console.log(userList);
-// });
-
-// createUser = (userEmail, userPassword, userSummonerName, userRegion, callback) => {
-
-// }
-
 module.exports = {
     user,
     userModel,
